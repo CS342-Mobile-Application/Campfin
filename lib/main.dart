@@ -26,7 +26,30 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
-       appBarTheme: const AppBarTheme(
+        textTheme: const TextTheme(
+          titleSmall: TextStyle(
+              fontFamily: 'Kanit', fontSize: 16.0, fontWeight: FontWeight.bold),
+          titleMedium: TextStyle(
+              fontFamily: 'Kanit', fontSize: 18.0, fontWeight: FontWeight.bold),
+          titleLarge: TextStyle(
+              fontFamily: 'Kanit', fontSize: 24.0, fontWeight: FontWeight.bold),
+          bodySmall: TextStyle(
+            fontFamily: 'Kanit',
+            fontSize: 14.0,
+          ),
+          bodyMedium: TextStyle(
+            fontFamily: 'Kanit',
+            fontSize: 16.0,
+          ),
+          bodyLarge: TextStyle(
+            fontFamily: 'Kanit',
+            fontSize: 20.0,
+          ),
+
+          // Add more text styles as needed
+        ),
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.black,
           //fontWeight: FontWeight.bold,
@@ -34,17 +57,16 @@ class _MyAppState extends State<MyApp> {
             color: Colors.black,
             fontSize: 28,
             fontWeight: FontWeight.bold,
+            fontFamily: 'Kanit',
           ),
           elevation: 0,
         ),
         scaffoldBackgroundColor: Color.fromARGB(255, 236, 177, 0),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-         backgroundColor: Color.fromARGB(255, 0, 0, 0),
+          backgroundColor: Color.fromARGB(255, 0, 0, 0),
         ),
-        
-
       ),
-      home: CustomNavigationBar( ),
+      home: CustomNavigationBar(),
     );
   }
 }

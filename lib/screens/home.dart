@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
 
@@ -21,7 +20,7 @@ class _HomeState extends State<Home> {
           children: <Widget>[
             Text(
               'Home',
-              style: TextStyle(fontSize: 30),
+              style: Theme.of(context).textTheme.bodyLarge,
             ),
           ],
         ),
