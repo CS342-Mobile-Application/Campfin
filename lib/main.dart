@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile_campfin/layout/custom_navigation_bar.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget {
@@ -61,12 +61,15 @@ class _MyAppState extends State<MyApp> {
           ),
           elevation: 0,
         ),
-        scaffoldBackgroundColor: Color.fromARGB(255, 236, 177, 0),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 236, 177, 0),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color.fromARGB(255, 0, 0, 0),
+          backgroundColor: Color.fromARGB(255, 255, 255, 255),
+          selectedItemColor: Color.fromARGB(255, 0, 158, 175),
+          unselectedItemColor: Colors.black,
+          
         ),
       ),
-      home: CustomNavigationBar(),
+      home: const CustomNavigationBar(),
     );
   }
 }

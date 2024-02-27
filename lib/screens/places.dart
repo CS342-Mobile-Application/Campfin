@@ -12,9 +12,9 @@ class _PlacesState extends State<Places> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('สถานที่'),
+        title: const Text('สถานที่'),
       ),
-      body: Center(
+      body: const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

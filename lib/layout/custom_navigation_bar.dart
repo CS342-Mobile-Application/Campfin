@@ -34,8 +34,6 @@ class _CustomNavigationBarState  extends State<CustomNavigationBar> {
       body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
-        unselectedItemColor: Colors.white,
-        selectedItemColor: Color.fromARGB(255, 0, 229, 255),
         onTap: (tap) => onTappedBar(tap),
         currentIndex: _selectedIndex,
         items: const <BottomNavigationBarItem>[
