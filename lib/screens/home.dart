@@ -13,12 +13,13 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Campfin'),
-        //action user icon
         actions: <Widget>[
           IconButton(
               icon: const Icon(Icons.account_circle,
                   color: Colors.black, size: 40.0),
-              onPressed: () {}),
+              onPressed: () {
+                         Navigator.pushNamed(context, '/profile');
+              }),
         ],
       ),
       body: const Center(

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_campfin/screens/home.dart';
 import 'package:mobile_campfin/screens/places.dart';
-import 'package:mobile_campfin/screens/profile.dart';
 import 'package:mobile_campfin/screens/shop.dart';
 import 'package:mobile_campfin/screens/trips.dart';
 
@@ -28,7 +27,6 @@ class _CustomNavigationBarState  extends State<CustomNavigationBar> {
      const Trips(),
      const Places(),
      const Shop(),
-     const Profile(),
     ];
     return Scaffold(
       body: screens[_selectedIndex],
@@ -47,8 +45,7 @@ class _CustomNavigationBarState  extends State<CustomNavigationBar> {
               icon: Icon(Icons.place), label: 'Places'),
           BottomNavigationBarItem(
               icon: Icon(Icons.shopping_cart), label: 'Shop'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: 'Profile'),
+     
         
         ],
       ),

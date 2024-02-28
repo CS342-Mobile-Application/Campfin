@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_campfin/layout/custom_navigation_bar.dart';
+import 'package:mobile_campfin/screens/create_trip.dart';
+import 'package:mobile_campfin/screens/profile.dart';
+import 'package:mobile_campfin/screens/trip_detail.dart';
 
 void main() {
   runApp(const MyApp());
@@ -68,8 +71,30 @@ class _MyAppState extends State<MyApp> {
           unselectedItemColor: Colors.black,
           
         ),
-      ),
+        listTileTheme: const ListTileThemeData(
+          
+          titleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          selectedTileColor: Color.fromARGB(255, 80, 60, 60),
+          iconColor: Color.fromARGB(255, 80, 60, 60),
+         subtitleTextStyle: TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+          ),
+            
+         )
+        ),
+  
+      
       home: const CustomNavigationBar(),
+      routes: {
+        '/trip-detail': (context) => const TripDetail(),
+        '/profile' : (context) => const Profile(),
+        '/create-trip': (context) => const CreateTrip()
+      },
     );
   }
 }
