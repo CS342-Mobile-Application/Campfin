@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_campfin/layout/custom_navigation_bar.dart';
+import 'package:get/get.dart';
+// import 'package:mobile_campfin/layout/custom_navigation_bar.dart';
 import 'package:mobile_campfin/screens/create_trip.dart';
 import 'package:mobile_campfin/screens/profile.dart';
+import 'package:mobile_campfin/screens/register.dart';
+// import 'package:mobile_campfin/screens/register.dart';
+// import 'package:mobile_campfin/screens/register.dart';
 import 'package:mobile_campfin/screens/trip_detail.dart';
 
 void main() {
-  runApp(const MyApp());
   runApp(const MyApp());
 }
 
@@ -27,9 +30,9 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData.dark().copyWith(
+    return GetMaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData.dark().copyWith(
           textTheme: const TextTheme(
             displaySmall: TextStyle(
                 fontFamily: 'Kanit',
@@ -83,38 +86,41 @@ class _MyAppState extends State<MyApp> {
             ),
             elevation: 0,
           ),
-        
-        scaffoldBackgroundColor: const Color.fromARGB(255, 236, 177, 0),
-        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-          backgroundColor: Color.fromARGB(255, 255, 255, 255),
-          selectedItemColor: Color.fromARGB(255, 0, 158, 175),
-          unselectedItemColor: Colors.black,
-          
-        ),
-        listTileTheme: const ListTileThemeData(
-          
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.bold,
+          scaffoldBackgroundColor: const Color.fromARGB(255, 236, 177, 0),
+          bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+            backgroundColor: Color.fromARGB(255, 255, 255, 255),
+            selectedItemColor: Color.fromARGB(255, 0, 158, 175),
+            unselectedItemColor: Colors.black,
           ),
-          selectedTileColor: Color.fromARGB(255, 80, 60, 60),
-          iconColor: Color.fromARGB(255, 80, 60, 60),
-         subtitleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 14,
-          ),
-            
-         )
-        ),
-  
-      
-      home: const CustomNavigationBar(),
-      routes: {
-        '/trip-detail': (context) => const TripDetail(),
-        '/profile' : (context) => const Profile(),
-        '/create-trip': (context) => const CreateTrip()
-      },
+          listTileTheme: const ListTileThemeData(
+            titleTextStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            selectedTileColor: Color.fromARGB(255, 80, 60, 60),
+            iconColor: Color.fromARGB(255, 80, 60, 60),
+            subtitleTextStyle: TextStyle(
+              color: Colors.black,
+              fontSize: 14,
+            ),
+          )),
+
+      home: const Register(), //CustomNavigationBar()
+      //init route / to CustomNavigationBar
+
+      getPages: [
+        GetPage(name: '/trip-detail', page: () => const TripDetail()),
+        GetPage(name: '/profile', page: () => const Profile()),
+        GetPage(name: '/create-trip', page: () => const CreateTrip()),
+        GetPage(name: '/register', page: () => const Register()),
+      ],
+      // routes: {
+      //   '/trip-detail': (context) => const TripDetail(),
+      //   '/profile' : (context) => const Profile(),
+      //   '/create-trip': (context) => const CreateTrip(),
+      //   // '/register': (context) => const Register(),
+      // },
     );
   }
 }

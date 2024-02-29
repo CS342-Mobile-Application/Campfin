@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'register.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -9,7 +12,9 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool _isObscured = true;
-
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,120 +52,144 @@ class _LoginState extends State<Login> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          'Connect with people and plan  your next camp.',
+                          'Connect with people and plan \n your next camp.',
                           textAlign: TextAlign.center,
                           style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ],
                     )),
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Username',
-                      labelStyle: Theme.of(context).textTheme.bodyMedium,
-                      border: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                  child: TextField(
-                    obscureText: _isObscured,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      labelStyle: Theme.of(context).textTheme.bodyMedium,
-                      border: const UnderlineInputBorder(
-                        borderSide: BorderSide(
-                          color: Colors.black,
-                        ),
-                      ),
-                      suffixIcon: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
-                        child: IconButton(
-                          alignment: Alignment.center,
-                          icon: Icon(
-                            _isObscured
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                            color: Colors.black,
+                Form(
+                  key: _formKey,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
+                    child: Column(children: [
+                      const SizedBox(height: 30),
+                      TextFormField(
+                        controller: _usernameController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your username';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          errorStyle:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.red,
+                                  ),
+                          labelText: 'Username',
+                          labelStyle: Theme.of(context).textTheme.bodyMedium,
+                          border: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                            ),
                           ),
-                          onPressed: () {
-                            setState(() {
-                              _isObscured = !_isObscured;
-                            });
-                          },
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 55),
-                      textStyle: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    child: Text(
-                      'Login',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: Colors.white,
+                      TextFormField(
+                        obscureText: _isObscured,
+                        controller: _passwordController,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter your password';
+                          }
+                          return null;
+                        },
+                        decoration: InputDecoration(
+                          errorStyle:
+                              Theme.of(context).textTheme.bodySmall?.copyWith(
+                                    color: Colors.red,
+                                  ),
+                          labelText: 'Password',
+                          labelStyle: Theme.of(context).textTheme.bodyMedium,
+                          border: const UnderlineInputBorder(
+                            borderSide: BorderSide(
+                              color: Colors.black,
+                            ),
                           ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                // Text(
-                //   'Or',
-                //   style: Theme.of(context).textTheme.bodySmall,
-                // ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                  child: Row(children: <Widget>[
-                    const Expanded(
-                        child: Divider(
-                      color: Color.fromARGB(255, 160, 160, 163),
-                    )),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    Text("OR",
-                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: const Color.fromARGB(255, 160, 160, 163),
-                            )),
-                    const SizedBox(
-                      width: 5,
-                    ),
-                    const Expanded(
-                        child: Divider(
-                      color: Color.fromARGB(255, 160, 160, 163),
-                    )),
-                  ]),
-                ),
-                const SizedBox(height: 10),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 0),
-                  child: ElevatedButton.icon(
-                    onPressed: () {},
-                    icon:
-                        Image.asset('assets/images/google-logo.png', width: 24),
-                    label: const Text('Continue with Google'),
-                    style: ElevatedButton.styleFrom(
-                      foregroundColor: Colors.black,
-                      backgroundColor: Colors.white,
-                      minimumSize: const Size(double.infinity, 55),
-                      side: const BorderSide(
-                          color: Color.fromRGBO(62, 50, 50, 1)),
-                      textStyle: Theme.of(context).textTheme.bodyMedium,
-                    ),
+                          suffixIcon: Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 17, 0, 0),
+                            child: IconButton(
+                              alignment: Alignment.center,
+                              icon: Icon(
+                                _isObscured
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                                color: Colors.black,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _isObscured = !_isObscured;
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            // Get.toNamed(page)
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          minimumSize: const Size(double.infinity, 55),
+                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                        child: Text(
+                          'Login',
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: Colors.white,
+                                  ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Text(
+                      //   'Or',
+                      //   style: Theme.of(context).textTheme.bodySmall,
+                      // ),
+                      Row(children: <Widget>[
+                        const Expanded(
+                            child: Divider(
+                          color: Color.fromARGB(255, 160, 160, 163),
+                        )),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Text("OR",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                  color:
+                                      const Color.fromARGB(255, 160, 160, 163),
+                                )),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        const Expanded(
+                            child: Divider(
+                          color: Color.fromARGB(255, 160, 160, 163),
+                        )),
+                      ]),
+                      const SizedBox(height: 10),
+                      ElevatedButton.icon(
+                        onPressed: () {},
+                        icon: Image.asset('assets/images/google-logo.png',
+                            width: 24),
+                        label: const Text('Continue with Google'),
+                        style: ElevatedButton.styleFrom(
+                          foregroundColor: Colors.black,
+                          backgroundColor: Colors.white,
+                          minimumSize: const Size(double.infinity, 55),
+                          side: const BorderSide(
+                              color: Color.fromRGBO(62, 50, 50, 1)),
+                          textStyle: Theme.of(context).textTheme.bodyMedium,
+                        ),
+                      ),
+                    ]),
                   ),
                 ),
               ],
@@ -170,7 +199,11 @@ class _LoginState extends State<Login> {
             Padding(
               padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  // Get.toNamed('/register');
+                  Get.off(() => const Register(),
+                      transition: Transition.rightToLeft);
+                },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 55),
                   textStyle: Theme.of(context).textTheme.bodyMedium,
