@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-// import 'package:mobile_campfin/layout/custom_navigation_bar.dart';
+import 'package:mobile_campfin/middleware/AuthMiddleware.dart';
 import 'package:mobile_campfin/screens/create_trip.dart';
+import 'package:mobile_campfin/screens/home.dart';
+import 'package:mobile_campfin/screens/login.dart';
 import 'package:mobile_campfin/screens/profile.dart';
 import 'package:mobile_campfin/screens/register.dart';
-// import 'package:mobile_campfin/screens/register.dart';
-// import 'package:mobile_campfin/screens/register.dart';
 import 'package:mobile_campfin/screens/trip_detail.dart';
+import 'package:mobile_campfin/services/AuthService.dart';
 
 void main() {
+  Get.put(AuthService());
   runApp(const MyApp());
 }
 
@@ -30,7 +32,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return GetMaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
           textTheme: const TextTheme(
@@ -105,22 +107,33 @@ class _MyAppState extends State<MyApp> {
               fontSize: 14,
             ),
           )),
-
-      home: const Register(), //CustomNavigationBar()
-      //init route / to CustomNavigationBar
-
+      defaultTransition: Transition.fadeIn,
       getPages: [
-        GetPage(name: '/trip-detail', page: () => const TripDetail()),
-        GetPage(name: '/profile', page: () => const Profile()),
-        GetPage(name: '/create-trip', page: () => const CreateTrip()),
-        GetPage(name: '/register', page: () => const Register()),
+        GetPage(
+            name: '/register',
+            page: () => const Register(),
+            middlewares: [AuthMiddleware()]),
+        GetPage(
+            name: '/login',
+            page: () => const Login(),
+            middlewares: [AuthMiddleware()]),
+        GetPage(
+            name: '/home',
+            page: () => const Home(),
+            middlewares: [AuthMiddleware()]),
+        GetPage(
+            name: '/trip-detail',
+            page: () => const TripDetail(),
+            middlewares: [AuthMiddleware()]),
+        GetPage(
+            name: '/profile',
+            page: () => const Profile(),
+            middlewares: [AuthMiddleware()]),
+        GetPage(
+            name: '/create-trip',
+            page: () => const CreateTrip(),
+            middlewares: [AuthMiddleware()]),
       ],
-      // routes: {
-      //   '/trip-detail': (context) => const TripDetail(),
-      //   '/profile' : (context) => const Profile(),
-      //   '/create-trip': (context) => const CreateTrip(),
-      //   // '/register': (context) => const Register(),
-      // },
     );
   }
 }
