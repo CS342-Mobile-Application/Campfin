@@ -56,21 +56,26 @@ class _MyAppState extends State<MyApp> {
                 fontFamily: 'Kanit',
                 fontSize: 18.0,
                 fontWeight: FontWeight.bold),
+                
             titleLarge: TextStyle(
                 fontFamily: 'Kanit',
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold),
+                
             bodySmall: TextStyle(
               fontFamily: 'Kanit',
               fontSize: 14.0,
+                  color: Colors.black,
             ),
             bodyMedium: TextStyle(
               fontFamily: 'Kanit',
               fontSize: 16.0,
+                  color: Colors.black,
             ),
             bodyLarge: TextStyle(
               fontFamily: 'Kanit',
               fontSize: 20.0,
+              color: Colors.black,
             ),
 
             // Add more text styles as needed
