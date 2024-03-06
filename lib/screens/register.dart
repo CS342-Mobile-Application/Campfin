@@ -87,7 +87,7 @@ class _RegisterState extends State<Register> {
                                   if (value == null || value.isEmpty) {
                                     return 'Please enter your password';
                                   }
-                                  if(value.length < 8){
+                                  if (value.length < 8) {
                                     return 'Password must be at least 8 characters';
                                   }
                                   return null;
@@ -210,8 +210,7 @@ class _RegisterState extends State<Register> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Get.to(const Login(),
-                                  transition: Transition.leftToRight);
+                              Get.offNamed('/login');
                             },
                             child: Text(
                               'Login',
