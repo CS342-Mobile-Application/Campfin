@@ -1,7 +1,8 @@
+// import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get/get.dart';
-
-import 'register.dart';
+import 'package:mobile_campfin/data/client/dio_client.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -15,6 +16,26 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final dio = DioClient().dio;
+  final String redirectUrl = "com.campfin.app";
+
+  Future<void> _loginWithGoogle() async {
+    const authUrl =
+        "https://asus.kittikun.me/auth/google";
+
+    try {
+      final result = await FlutterWebAuth.authenticate(
+        url: authUrl,
+        callbackUrlScheme: redirectUrl,
+      );
+      final token = Uri.parse(result).queryParameters['token'];
+
+      print("Authentication Result: $token");
+    } catch (e) {
+      print("Error during authentication: $e");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -131,6 +152,7 @@ class _LoginState extends State<Login> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             // Get.toNamed(page)
+                            _signInWithUsernameAndPassword();
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -176,7 +198,7 @@ class _LoginState extends State<Login> {
                       ]),
                       const SizedBox(height: 10),
                       ElevatedButton.icon(
-                        onPressed: () {},
+                        onPressed: _loginWithGoogle,
                         icon: Image.asset('assets/images/google-logo.png',
                             width: 24),
                         label: const Text('Continue with Google'),
@@ -200,9 +222,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
               child: ElevatedButton(
                 onPressed: () {
-                  // Get.toNamed('/register');
-                  Get.off(() => const Register(),
-                      transition: Transition.rightToLeft);
+                  Get.offNamed('/register');
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 55),
@@ -221,5 +241,25 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  void _signInWithUsernameAndPassword() {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+    dio.post(
+      "/auth/login",
+      data: {
+        "username": username,
+        "password": password,
+      },
+    ).then((response) {
+      print(response.data);
+      // Get.toNamed('/home');
+      Get.offNamed('/home');
+      return true;
+    }).catchError((error) {
+      print(error);
+      return false;
+    });
   }
 }
