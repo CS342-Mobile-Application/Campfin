@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_campfin/layout/custom_navigation_bar.dart';
 import 'package:mobile_campfin/middleware/AuthMiddleware.dart';
-import 'package:mobile_campfin/screens/create_trip.dart';
-import 'package:mobile_campfin/screens/home.dart';
-import 'package:mobile_campfin/screens/login.dart';
-import 'package:mobile_campfin/screens/profile.dart';
-import 'package:mobile_campfin/screens/register.dart';
-import 'package:mobile_campfin/screens/trip_detail.dart';
 import 'package:mobile_campfin/services/AuthService.dart';
+import 'package:mobile_campfin/view/create_trip.dart';
+import 'package:mobile_campfin/view/login.dart';
+import 'package:mobile_campfin/view/profile.dart';
+import 'package:mobile_campfin/view/register.dart';
+import 'package:mobile_campfin/view/trip_detail.dart';
+import 'package:mobile_campfin/view/trips.dart';
 
 void main() {
   Get.put(AuthService());
   runApp(const MyApp());
 }
 
+
+
 class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+
+  const MyApp({Key? key,}) : super(key: key);
 
   @override
-  _MyAppState createState() => _MyAppState();
+  _MyAppState createState() => _MyAppState(
+  );
 }
 
 class _MyAppState extends State<MyApp> {
   int selectedIndex = 0;
+
+
+  
 
   void onItemTapped(int index) {
     setState(() {
@@ -33,6 +41,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
+      
       title: 'Flutter Demo',
       theme: ThemeData.dark().copyWith(
           textTheme: const TextTheme(
@@ -117,28 +126,35 @@ class _MyAppState extends State<MyApp> {
         GetPage(
             name: '/register',
             page: () => const Register(),
-            middlewares: [AuthMiddleware()]),
+            middlewares: [AuthMiddleware(context)]),
         GetPage(
             name: '/login',
             page: () => const Login(),
-            middlewares: [AuthMiddleware()]),
+            middlewares: [AuthMiddleware(context)]),
         GetPage(
             name: '/home',
-            page: () => const Home(),
-            middlewares: [AuthMiddleware()]),
+            page: () => const CustomNavigationBar(),
+            middlewares: [AuthMiddleware(context)]),
+        GetPage(
+            name: '/trips',
+            page: () => const Trips(),
+            middlewares: [AuthMiddleware(context)]),
         GetPage(
             name: '/trip-detail',
             page: () => const TripDetail(),
-            middlewares: [AuthMiddleware()]),
+            middlewares: [AuthMiddleware(context)]),
         GetPage(
             name: '/profile',
             page: () => const Profile(),
-            middlewares: [AuthMiddleware()]),
+            middlewares: [AuthMiddleware(context)]),
         GetPage(
             name: '/create-trip',
             page: () => const CreateTrip(),
-            middlewares: [AuthMiddleware()]),
+            middlewares: [AuthMiddleware(context)]),
       ],
+      
+      
+      
     );
   }
 }

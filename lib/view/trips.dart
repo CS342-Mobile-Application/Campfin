@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_campfin/view/create_trip.dart';
+import 'package:mobile_campfin/view/profile.dart';
+import 'package:mobile_campfin/view/trip_detail.dart';
 
 class Trips extends StatefulWidget {
   const Trips({Key? key}) : super(key: key);
@@ -18,7 +22,9 @@ class _TripsState extends State<Trips> {
               icon: const Icon(Icons.account_circle,
                   color: Colors.black, size: 40.0),
               onPressed: () {
-                Navigator.pushNamed(context, '/profile');
+                Get.to(const Profile());
+
+
               }),
         ],
       ),
@@ -67,7 +73,8 @@ class _TripsState extends State<Trips> {
                   
                   ElevatedButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/create-trip');
+                      // Navigator.pushNamed(context, '/create-trip');
+                      Get.to(const CreateTrip());
                     },
                     style: ElevatedButton.styleFrom(
                       padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
@@ -112,7 +119,7 @@ class TripCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/trip-detail');
+         Get.to(const TripDetail());
       },
       child: Stack(
         children: [

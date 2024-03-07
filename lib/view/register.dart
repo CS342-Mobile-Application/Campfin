@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_campfin/screens/login.dart';
+import 'package:mobile_campfin/view/login.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});

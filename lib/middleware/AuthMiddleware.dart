@@ -1,8 +1,18 @@
 // import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_campfin/services/AuthService.dart';
 
 class AuthMiddleware extends GetMiddleware {
+
+  //context
+  final BuildContext context;
+
+  AuthMiddleware(this.context);
+
+
+
+
   AuthService authService = Get.find<AuthService>();
 
   final List<String> ignoredRoutes = ['/public', '/ignore'];
@@ -12,7 +22,9 @@ class AuthMiddleware extends GetMiddleware {
     if (ignoredRoutes.contains(route)) {
       return null;
     }
-    bool isAuthenticated = authService.isLoggedIn();
+    bool isAuthenticated = authService.isLoggedIn(context);
+    
+    print('isAuthenticated: $isAuthenticated');
 
     if (isAuthenticated &&
         (route.locationString == '/login' ||

@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get/get.dart';
+import 'package:mobile_campfin/controllers/auth_controller.dart';
 import 'package:mobile_campfin/data/client/dio_client.dart';
 
 class Login extends StatefulWidget {
@@ -12,6 +13,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  final authController = Get.put(AuthController());
+
+
   bool _isObscured = true;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
@@ -198,7 +202,9 @@ class _LoginState extends State<Login> {
                       ]),
                       const SizedBox(height: 10),
                       ElevatedButton.icon(
-                        onPressed: _loginWithGoogle,
+                        onPressed: () async {
+                           await authController.loginWithGoogle();
+                        },  
                         icon: Image.asset('assets/images/google-logo.png',
                             width: 24),
                         label: const Text('Continue with Google'),
