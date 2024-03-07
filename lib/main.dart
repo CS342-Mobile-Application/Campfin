@@ -108,6 +108,10 @@ class _MyAppState extends State<MyApp> {
             ),
           )),
       defaultTransition: Transition.fadeIn,
+      key: Get.key,
+      useInheritedMediaQuery: true,
+      debugShowCheckedModeBanner: false,
+      smartManagement: SmartManagement.full,
       getPages: [
         GetPage(
             name: '/register',

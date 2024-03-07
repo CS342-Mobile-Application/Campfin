@@ -16,12 +16,11 @@ class _LoginState extends State<Login> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final dio = DioClient().dio;
+  final dio = DioClient();
   final String redirectUrl = "com.campfin.app";
 
   Future<void> _loginWithGoogle() async {
-    const authUrl =
-        "https://asus.kittikun.me/auth/google";
+    const authUrl = "https://asus.kittikun.me/auth/google";
 
     try {
       final result = await FlutterWebAuth.authenticate(
@@ -149,10 +148,10 @@ class _LoginState extends State<Login> {
                       ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            // Get.toNamed(page)
-                            _signInWithUsernameAndPassword();
+                            await _signInWithUsernameAndPassword();
+                            Get.rootDelegate.offNamed('/home');
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -222,7 +221,7 @@ class _LoginState extends State<Login> {
               padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
               child: ElevatedButton(
                 onPressed: () {
-                  Get.offNamed('/register');
+                  Get.rootDelegate.offNamed('/register');
                 },
                 style: ElevatedButton.styleFrom(
                   minimumSize: const Size(double.infinity, 55),
@@ -243,23 +242,19 @@ class _LoginState extends State<Login> {
     );
   }
 
-  void _signInWithUsernameAndPassword() {
+  Future<void> _signInWithUsernameAndPassword() async {
     final username = _usernameController.text;
     final password = _passwordController.text;
-    dio.post(
-      "/auth/login",
-      data: {
-        "username": username,
-        "password": password,
-      },
-    ).then((response) {
-      print(response.data);
-      // Get.toNamed('/home');
-      Get.offNamed('/home');
-      return true;
-    }).catchError((error) {
-      print(error);
-      return false;
+
+    final data = {
+      "username": username,
+      "password": password,
+    };
+    await dio.login({
+      'username': _usernameController.text,
+      'password': _passwordController.text,
     });
+    print("Login: $data");
+    return;
   }
 }

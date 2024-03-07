@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_campfin/screens/login.dart';
+import 'package:mobile_campfin/data/client/dio_client.dart';
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -13,9 +13,12 @@ class _RegisterState extends State<Register> {
   bool _isObscured = true;
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final dio = DioClient();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -72,6 +75,34 @@ class _RegisterState extends State<Register> {
                                         color: Colors.red,
                                       ),
                                   labelText: 'Username',
+                                  labelStyle:
+                                      Theme.of(context).textTheme.bodyMedium,
+                                  border: const UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              TextFormField(
+                                controller: _emailController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  }
+                                  if (!GetUtils.isEmail(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  errorStyle: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall
+                                      ?.copyWith(
+                                        color: Colors.red,
+                                      ),
+                                  labelText: 'Email',
                                   labelStyle:
                                       Theme.of(context).textTheme.bodyMedium,
                                   border: const UnderlineInputBorder(
@@ -177,10 +208,10 @@ class _RegisterState extends State<Register> {
                               ),
                               const SizedBox(height: 20),
                               ElevatedButton(
-                                onPressed: () {
+                                onPressed: () async {
                                   if (_formKey.currentState!.validate()) {
-                                    Get.to(const Login(),
-                                        transition: Transition.leftToRight);
+                                    await _register();
+                                    Get.rootDelegate.offNamed('/login');
                                   }
                                 },
                                 style: ElevatedButton.styleFrom(
@@ -210,7 +241,7 @@ class _RegisterState extends State<Register> {
                           ),
                           TextButton(
                             onPressed: () {
-                              Get.offNamed('/login');
+                              Get.rootDelegate.offNamed('/login');
                             },
                             child: Text(
                               'Login',
@@ -231,5 +262,14 @@ class _RegisterState extends State<Register> {
             ],
           ),
         ));
+  }
+
+  Future<void> _register() async {
+    final data = await dio.register({
+      'username': _usernameController.text,
+      'email': _emailController.text,
+      'password': _passwordController.text,
+    });
+    print("Register: $data");
   }
 }
