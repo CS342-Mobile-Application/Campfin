@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:mobile_campfin/screens/home.dart';
-import 'package:mobile_campfin/screens/places.dart';
-import 'package:mobile_campfin/screens/shop.dart';
-import 'package:mobile_campfin/screens/trips.dart';
+import 'package:mobile_campfin/view/home.dart';
+import 'package:mobile_campfin/view/places.dart';
+import 'package:mobile_campfin/view/shop.dart';
+import 'package:mobile_campfin/view/trips.dart';
 
 
 class CustomNavigationBar extends StatefulWidget {

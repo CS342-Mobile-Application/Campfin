@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mobile_campfin/middleware/AuthMiddleware.dart';
-import 'package:mobile_campfin/screens/create_trip.dart';
-import 'package:mobile_campfin/screens/home.dart';
-import 'package:mobile_campfin/screens/login.dart';
-import 'package:mobile_campfin/screens/profile.dart';
-import 'package:mobile_campfin/screens/register.dart';
-import 'package:mobile_campfin/screens/trip_detail.dart';
+import 'package:mobile_campfin/view/create_trip.dart';
+import 'package:mobile_campfin/view/home.dart';
+import 'package:mobile_campfin/view/login.dart';
+import 'package:mobile_campfin/view/profile.dart';
+import 'package:mobile_campfin/view/register.dart';
+import 'package:mobile_campfin/view/trip_detail.dart';
 import 'package:mobile_campfin/services/AuthService.dart';
 
 void main() {
