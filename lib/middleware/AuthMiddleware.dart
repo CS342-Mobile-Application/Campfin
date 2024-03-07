@@ -32,7 +32,14 @@ class AuthMiddleware extends GetMiddleware {
       Get.rootDelegate.toNamed('/home');
       return null;
     }
-    if (!isAuthenticated && route.locationString != '/login') {
+
+    if (!isAuthenticated &&
+        (route.locationString == '/login' ||
+            route.locationString == '/register')) {
+      return await super.redirectDelegate(route);
+    }
+
+    if (!isAuthenticated) {
       Get.rootDelegate.toNamed('/login');
       return null;
     }

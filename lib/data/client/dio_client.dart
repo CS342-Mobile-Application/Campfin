@@ -10,4 +10,11 @@ class DioClient {
 
   Dio get dio => _dio;
 
+  Future<Response> login(Map<String, dynamic> data) async {
+    return await _dio.post('auth/login', data: data);
+  }
+
+  Future<Response> register(Map<String, dynamic> data) async {
+    return await _dio.post('auth/register', data: data);
+  }
 }
