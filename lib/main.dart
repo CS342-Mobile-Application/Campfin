@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:mobile_campfin/layout/custom_navigation_bar.dart';
 import 'package:mobile_campfin/middleware/AuthMiddleware.dart';
 import 'package:mobile_campfin/services/AuthService.dart';
 import 'package:mobile_campfin/view/create_trip.dart';
 import 'package:mobile_campfin/view/login.dart';
+import 'package:mobile_campfin/view/place_detail.dart';
 import 'package:mobile_campfin/view/profile.dart';
 import 'package:mobile_campfin/view/register.dart';
 import 'package:mobile_campfin/view/trip_detail.dart';
 import 'package:mobile_campfin/view/trips.dart';
 
-void main() {
+
+Future main() async {
   Get.put(AuthService());
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 
@@ -122,7 +126,7 @@ class _MyAppState extends State<MyApp> {
             ),
           )),
       defaultTransition: Transition.fadeIn,
-      key: Get.key,
+      // key: Get.key,
       useInheritedMediaQuery: true,
       debugShowCheckedModeBanner: false,
       smartManagement: SmartManagement.full,
@@ -145,7 +149,14 @@ class _MyAppState extends State<MyApp> {
             middlewares: [AuthMiddleware(context)]),
         GetPage(
             name: '/trip-detail',
-            page: () => const TripDetail(),
+            page: () => const TripDetail(
+
+            ),
+            middlewares: [AuthMiddleware(context)]),
+
+        GetPage(
+            name: '/place-detail',
+            page:() =>const PlaceDetail(),
             middlewares: [AuthMiddleware(context)]),
         GetPage(
             name: '/profile',

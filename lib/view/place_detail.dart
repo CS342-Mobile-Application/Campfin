@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_campfin/controllers/place_controller.dart';
 
 class PlaceDetail extends StatefulWidget {
   const PlaceDetail({Key? key}) : super(key: key);
@@ -11,6 +13,28 @@ class PlaceDetail extends StatefulWidget {
   
 
 class _PlaceDetailState extends State<PlaceDetail> {
+  final PlaceController placeController = PlaceController();
+  final placeId = Get.rootDelegate.arguments()['id'];
+  dynamic place = {};
+
+  @override
+  void initState() {
+    super.initState();
+    print('placeId: $placeId');
+    if (placeId != null) {
+      setPlace();
+    }
+  }
+
+  Future<void> setPlace() async {
+    dynamic tempPlace = await placeController.getPlaceById(placeId);
+    setState(() {
+      place = tempPlace;
+    });
+  }
+
+
+
 
  
 
@@ -31,13 +55,20 @@ final List reviewData = [
   }
 ];
     
-
-
-    
-
-    
   @override
   Widget build(BuildContext context) {
+    if (place.isEmpty) {
+      //return skeleton
+      return  Scaffold(
+        appBar: AppBar(
+          title: const Text('รายละเอียดทริป'),
+        ),
+        body: const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('รายละเอียดทริป'),
@@ -61,12 +92,10 @@ final List reviewData = [
             children: <Widget>[
               Center(
                   child: Container(
+                width: double.infinity,
                 decoration: const BoxDecoration(),
                 clipBehavior: Clip.antiAlias, // Ensure content is clipped
-                child: Image.network(
-                  'https://images.unsplash.com/photo-1525811902-f2342640856e?q=80&w=3542&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                  fit: BoxFit.cover,
-                ),
+                child: buildPlaceImage(place),
               )),
               const SizedBox(height: 8),
               Padding(
@@ -75,9 +104,9 @@ final List reviewData = [
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const Text(
-                          'กางเต้นท์ชมวิวเขาใหญ่',
-                          style: TextStyle(
+                     Text(
+                          place['name'],
+                          style: const TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w600,
                               color: Colors.black),
@@ -92,18 +121,17 @@ final List reviewData = [
                             ),
                             child: const Icon(Icons.location_on),
                           ),
-                          title: const Text('อุทยานแห่งชาติเขาใหญ่'),
-                          subtitle: const Text('อ.เมือง จ.นครราชสีมา'),
+                          title: Text(place['location']),
+                          subtitle: Text(place['address']),
                         ),
-                        //auther
+                        // Description
                         const SizedBox(height: 8),
-                        const Text(
-                          'ทริปนี้เป็นทริปที่จะพาคุณไปเที่ยวที่อุทยานแห่งชาติเขาใหญ่ ที่จะมีกิจกรรมต่างๆ ที่คุณจะได้ร่วมสนุกกับเพื่อนๆ และได้เรียนรู้สิ่งใหม่ๆ อีกมากมาย',
-                          style: TextStyle(fontSize: 16, color: Colors.black),
+                        Text(
+                          place['description'],
+                          style: const TextStyle(
+                              fontSize: 16, color: Colors.black),
                         ),
-          
-                        const SizedBox(height: 10),
-          
+
                         //review
                         const Text(
                           'รีวิว (10)',
@@ -204,4 +232,25 @@ final List reviewData = [
       ),
     );
   }
+}
+
+
+
+Widget buildPlaceImage(Map<String, dynamic> trip) {
+  final imageUrl = trip['image'];
+  return imageUrl != null
+      ? Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset(
+              'assets/images/campfinLogo.png', // Change to your image path
+              fit: BoxFit.cover,
+            );
+          },
+        )
+      : Image.asset(
+          'assets/images/campfinLogo.png', // Change to your image path
+          fit: BoxFit.cover,
+        );
 }

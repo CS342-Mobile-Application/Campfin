@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart' hide NavigationBar;
+import 'package:get/get.dart';
+import 'package:mobile_campfin/controllers/auth_controller.dart';
+import 'package:mobile_campfin/view/profile.dart';
 
 
 class Home extends StatefulWidget {
@@ -9,6 +12,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+
+  final AuthController authController = Get.put(AuthController());
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,7 +26,25 @@ class _HomeState extends State<Home> {
               icon: const Icon(Icons.account_circle,
                   color: Colors.black, size: 40.0),
               onPressed: () {
-                         Navigator.pushNamed(context, '/profile');
+                Get.to(const Profile());
+                      
+              }),
+              //logout
+              IconButton(
+              icon: const Icon(Icons.logout,
+                  color: Colors.black, size: 40.0),
+              onPressed: () {
+                //alert dialog confirm logout
+                Get.defaultDialog(
+                  title: 'ออกจากระบบ',
+                  middleText: 'คุณต้องการออกจากระบบใช่หรือไม่?',
+                  textConfirm: 'ใช่',
+                  textCancel: 'ไม่',
+                  confirmTextColor: Colors.white,
+                  onConfirm: () {
+                    authController.removeToken();
+                  },
+                );
               }),
         ],
       ),

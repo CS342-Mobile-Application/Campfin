@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_campfin/controllers/trip_controller.dart';
 import 'package:mobile_campfin/view/create_trip.dart';
 import 'package:mobile_campfin/view/profile.dart';
-import 'package:mobile_campfin/view/trip_detail.dart';
 
 class Trips extends StatefulWidget {
   const Trips({Key? key}) : super(key: key);
@@ -12,19 +12,25 @@ class Trips extends StatefulWidget {
 }
 
 class _TripsState extends State<Trips> {
+  final TripController tripController = Get.put(TripController());
+  
+
+
+  onInit() {
+    tripController.fetchTrips();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('ทริป'),
-           actions: <Widget>[
+        actions: <Widget>[
           IconButton(
               icon: const Icon(Icons.account_circle,
                   color: Colors.black, size: 40.0),
               onPressed: () {
                 Get.to(const Profile());
-
-
               }),
         ],
       ),
@@ -67,17 +73,20 @@ class _TripsState extends State<Trips> {
               const SizedBox(height: 8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                 children: <Widget>[
-                  const Text('10 ทริปกำลังเดินทาง', style: TextStyle(fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold)),
-                  
+                  const Text('10 ทริปกำลังเดินทาง',
+                      style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold)),
                   ElevatedButton(
                     onPressed: () {
                       // Navigator.pushNamed(context, '/create-trip');
                       Get.to(const CreateTrip());
                     },
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.only(left: 30, right: 30, top: 10, bottom: 10),
+                      padding: const EdgeInsets.only(
+                          left: 30, right: 30, top: 10, bottom: 10),
                       foregroundColor: Colors.white,
                       backgroundColor: const Color.fromARGB(255, 80, 60, 60),
                       shape: RoundedRectangleBorder(
@@ -90,114 +99,96 @@ class _TripsState extends State<Trips> {
               ),
               const SizedBox(height: 8),
               Expanded(
-                child: ListView(
-                  children: const <Widget>[
-                    TripCard(),
-                    SizedBox(height: 8),
-                    TripCard(),
-                    SizedBox(height: 8),
-                    TripCard(),
-                  ]
+                child: Obx(() => 
+                ListView.builder(
+                    itemCount: tripController.tripList.length,
+                    itemBuilder: (context, index) {
+                      final trip = tripController.tripList[index];
+                      return TripCard(trip: trip);
+                    },
+                  ),
+            
+
                 ),
               ),
-              
-
             ],
           ),
         ),
       ),
     );
   }
-  
 }
 
-
 class TripCard extends StatelessWidget {
-  const TripCard({Key? key}) : super(key: key);
+  final Map<String, dynamic> trip;
+
+  const TripCard({Key? key, required this.trip}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-         Get.to(const TripDetail());
+        //send trip id
+        Get.rootDelegate.toNamed('/trip-detail',
+            arguments: {'id': trip['id']});
+            
       },
       child: Stack(
         children: [
           Card(
             color: const Color.fromARGB(255, 255, 255, 255),
-            // Define the shape of the card
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(4),
             ),
-            // Define how the card's content should be clipped
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            // Define the child widget of the card
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Add padding around the row widget
                 Padding(
                   padding: const EdgeInsets.all(15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // Add an image widget to display an image
-                      Image.asset(
-                        'assets/images/campfinLogo.png',
-                        height: 100,
-                        width: 100,
-                        fit: BoxFit.cover,
-                      ),
-                      // Add some spacing between the image and the text
+                    buildPlaceImage(trip),
                       const SizedBox(width: 20),
-                      // Add an expanded widget to take up the remaining horizontal space
-                       Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             const SizedBox(height: 5),
-                            const Text(
-                              "Fri, Apr 23 •6:00 PM",
-                              style: TextStyle(
-                                fontSize: 12,
-                                color: Colors.black,
-                                fontWeight: FontWeight.w300,
-                              ),
-                            ),
-                            const Text(
-                              "Cards Title 1",
-                              style: TextStyle(
+                            Text(
+                              trip['title'] ?? '',
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             Container(
-                              margin: const EdgeInsets.only(top: 5 ,bottom: 5),
+                              margin: const EdgeInsets.only(top: 5, bottom: 5),
                               padding: const EdgeInsets.all(5),
                               decoration: BoxDecoration(
                                 color: const Color.fromARGB(255, 236, 177, 0),
                                 borderRadius: BorderRadius.circular(5),
                               ),
-                              child: const Text(
-                                "เข้าร่วมแล้ว 10 คน",
-                                style: TextStyle(
+                              child: Text(
+                                'เข้าร่วมแล้ว ${trip['participants']?.length ?? 0} / ${trip['maxParticipant'] ?? 0} คน',
+                                style: const TextStyle(
                                   fontSize: 12,
                                   color: Colors.black,
                                 ),
                               ),
-                            ),  
-                      
-                            const Row(
+                            ),
+                            Row(
                               children: <Widget>[
-                                Icon(
+                                const Icon(
                                   Icons.location_on,
                                   color: Colors.black,
                                   size: 16,
                                 ),
                                 Text(
-                                  "อุทยานแห่งชาติเขาใหญ่",
-                                  style: TextStyle(
+                                  trip['Place']['location'] ?? '',
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,
                                   ),
@@ -227,4 +218,30 @@ class TripCard extends StatelessWidget {
       ),
     );
   }
+}
+
+
+Widget buildPlaceImage(Map<String, dynamic> trip) {
+  final imageUrl = trip['Place']['image'];
+  return imageUrl != null
+      ? Image.network(
+          imageUrl,
+          height: 100,
+          width: 100,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Image.asset(
+              'assets/images/campfinLogo.png', // Change to your image path
+              height: 100,
+              width: 100,
+              fit: BoxFit.cover,
+            );
+          },
+        )
+      : Image.asset(
+          'assets/images/campfinLogo.png', // Change to your image path
+          height: 100,
+          width: 100,
+          fit: BoxFit.cover,
+        );
 }

@@ -1,15 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:mobile_campfin/controllers/trip_controller.dart';
 
 class TripDetail extends StatefulWidget {
+
+
   const TripDetail({Key? key}) : super(key: key);
+  
+
+
 
   @override
   _TripDetailState createState() => _TripDetailState();
 }
 
 class _TripDetailState extends State<TripDetail> {
+    final TripController tripController = Get.put(TripController());
+     final tripId = Get.rootDelegate.arguments()['id'];
+     dynamic trip = {};
+  
+    @override
+  void initState() {
+    super.initState();
+    if (tripId != null) {
+      setTrip();
+    }
+
+  }
+
+Future<void> setTrip() async {
+
+  dynamic tempTrip = await tripController.getTripById(tripId);
+  setState(() {
+    trip = tempTrip;
+  });
+
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
+        if (trip.isEmpty) {
+          //return skeleton
+          return  Scaffold(
+            appBar: AppBar(
+              title: const Text('รายละเอียดทริป'),
+            ),
+            body: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+
+               
+
+
+
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('รายละเอียดทริป'),
@@ -35,7 +83,7 @@ class _TripDetailState extends State<TripDetail> {
               decoration: const BoxDecoration(),
               clipBehavior: Clip.antiAlias, // Ensure content is clipped
               child: Image.network(
-                'https://images.unsplash.com/photo-1525811902-f2342640856e?q=80&w=3542&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                trip['Place']['image'] ?? '',
                 fit: BoxFit.cover,
               ),
             )),
@@ -47,14 +95,16 @@ class _TripDetailState extends State<TripDetail> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      const Text(
-                        'กางเต้นท์ชมวิวเขาใหญ่',
-                        style: TextStyle(
+                       Text(
+                        trip['title'] ?? '',
+                        style:const TextStyle(
                             fontSize: 22,
                             fontWeight: FontWeight.w600,
                             color: Colors.black),
                       ),
                       const SizedBox(height: 4),
+                   
+               
                       ListTile(
                         leading: Container(
                           padding: const EdgeInsets.all(12.0),
@@ -76,9 +126,12 @@ class _TripDetailState extends State<TripDetail> {
                           ),
                           child: const Icon(Icons.location_on),
                         ),
-                        title: const Text('อุทยานแห่งชาติเขาใหญ่'),
-                        subtitle: const Text('อ.เมือง จ.นครราชสีมา'),
+                        title: Text(trip['Place']['name'] ?? ''),
+                        subtitle: Text(trip['Place']['address'] ?? ''),
                       ),
+                      //show map
+                      const SizedBox(height: 8),
+                      
                       //auther
                       ListTile(
                         leading: Container(
@@ -118,9 +171,9 @@ class _TripDetailState extends State<TripDetail> {
 
                       ),
                       const SizedBox(height: 8),
-                             const Text(
-                        'ทริปนี้เป็นทริปที่จะพาคุณไปเที่ยวที่อุทยานแห่งชาติเขาใหญ่ ที่จะมีกิจกรรมต่างๆ ที่คุณจะได้ร่วมสนุกกับเพื่อนๆ และได้เรียนรู้สิ่งใหม่ๆ อีกมากมาย',
-                        style: TextStyle(fontSize: 16, color: Colors.black),
+                              Text(
+                        trip['Place']['description'] ,
+                        style: const TextStyle(fontSize: 16, color: Colors.black),
                       ),
 
                       const SizedBox(height: 10),

@@ -1,6 +1,5 @@
 // import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
 import 'package:get/get.dart';
 import 'package:mobile_campfin/controllers/auth_controller.dart';
 import 'package:mobile_campfin/data/client/dio_client.dart';
@@ -23,21 +22,6 @@ class _LoginState extends State<Login> {
   final dio = DioClient();
   final String redirectUrl = "com.campfin.app";
 
-  Future<void> _loginWithGoogle() async {
-    const authUrl = "https://asus.kittikun.me/auth/google";
-
-    try {
-      final result = await FlutterWebAuth.authenticate(
-        url: authUrl,
-        callbackUrlScheme: redirectUrl,
-      );
-      final token = Uri.parse(result).queryParameters['token'];
-
-      print("Authentication Result: $token");
-    } catch (e) {
-      print("Error during authentication: $e");
-    }
-  }
 
   @override
   Widget build(BuildContext context) {

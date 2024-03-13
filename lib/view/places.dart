@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:mobile_campfin/controllers/place_controller.dart';
 import 'package:mobile_campfin/view/place_detail.dart';
 
 class Places extends StatefulWidget {
@@ -10,6 +11,12 @@ class Places extends StatefulWidget {
 }
 
 class _PlacesState extends State<Places> {
+  final PlaceController placeController = Get.put(PlaceController());
+
+  onInit() {
+    placeController.fetchPlaces();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,9 +24,10 @@ class _PlacesState extends State<Places> {
         title: const Text('สถานที่ท่องเที่ยว'),
         actions: <Widget>[
           IconButton(
-              icon: const Icon(Icons.account_circle,
-                  color: Colors.black, size: 40.0),
-              onPressed: () {}),
+            icon: const Icon(Icons.account_circle,
+                color: Colors.black, size: 40.0),
+            onPressed: () {},
+          ),
         ],
       ),
       body: Center(
@@ -38,12 +46,13 @@ class _PlacesState extends State<Places> {
                         hintStyle: TextStyle(
                           fontSize: 16,
                           color: Color.fromARGB(255, 166, 166, 166),
-                          fontWeight: FontWeight.normal
+                          fontWeight: FontWeight.normal,
                         ),
                         filled: true,
                         fillColor: Colors.white,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(10.0)),
                         ),
                       ),
                       style: TextStyle(fontSize: 20, color: Colors.black),
@@ -64,56 +73,62 @@ class _PlacesState extends State<Places> {
                   ),
                 ],
               ),
-          
-              //listview scrolll horizontal
-             
-    
-                       const SizedBox(height: 16),
+              const SizedBox(height: 16),
               Expanded(
-                child: ListView(children: const <Widget>[
-              
-                  Row(
-                    children: [
-                      Text(
-                        'สถานที่แนะนำ',
-                        style: TextStyle(
+                child: ListView(
+                  children: <Widget>[
+                    const Row(
+                      children: [
+                        Text(
+                          'สถานที่แนะนำ',
+                          style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                      ),
-                    ],
-                  ),
-                   SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: <Widget>[
-                        HighlightPlaceCard(),
-                        SizedBox(width: 8),
-                        HighlightPlaceCard(),
-                        SizedBox(width: 8),
-                        HighlightPlaceCard(),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ],
                     ),
-                  ),
-                        SizedBox(height: 16),
-                        Row(
-                    children: [
-                      Text(
-                        'สถานที่ทั้งหมด',
-                        style: TextStyle(
+                    const SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: <Widget>[
+                          HighlightPlaceCard(),
+                          SizedBox(width: 8),
+                          HighlightPlaceCard(),
+                          SizedBox(width: 8),
+                          HighlightPlaceCard(),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    const Row(
+                      children: [
+                        Text(
+                          'สถานที่ทั้งหมด',
+                          style: TextStyle(
                             fontSize: 18,
                             color: Colors.black,
-                            fontWeight: FontWeight.bold),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Obx(
+                      () => ListView.builder(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: placeController.placeList.length,
+                        itemBuilder: (context, index) {
+                          final place = placeController.placeList[index];
+                          return PlaceCard(
+                   place: place,
+                          );
+                        },
                       ),
-                    ],
-                  ), 
-                  SizedBox(height: 8),
-                  PlaceCard(),
-                  SizedBox(height: 8),
-                  PlaceCard(),
-                  SizedBox(height: 8),
-                  PlaceCard(),
-                ]),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -124,80 +139,85 @@ class _PlacesState extends State<Places> {
 }
 
 class PlaceCard extends StatelessWidget {
-  const PlaceCard({Key? key}) : super(key: key);
+  final Map<String, dynamic> place;
+
+  const PlaceCard({
+    Key? key,
+    required this.place,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(const PlaceDetail());
+          print('place id: $place');
+              Get.rootDelegate.toNamed('/place-detail',
+            arguments: {'id': place['name']});
       },
       child: Stack(
         children: [
           Card(
             color: const Color.fromARGB(255, 255, 255, 255),
-            // Define the shape of the card
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
             ),
-            // Define how the card's content should be clipped
             clipBehavior: Clip.antiAliasWithSaveLayer,
-            // Define the child widget of the card
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                // Add padding around the row widget
                 Padding(
                   padding: const EdgeInsets.all(15),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      // Add an image widget to display an image
                       ClipRect(
                         child: SizedBox(
                           width: 100,
                           height: 100,
-                          child: Image.network(
-                            'https://images.unsplash.com/photo-1534880606858-29b0e8a24e8d?q=80&w=3540&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
-                            fit: BoxFit.cover,
-                          ),
+                          child: place['image'] != null
+                              ? Image.network(
+                                  place['image'],
+                                  fit: BoxFit.cover,
+                                )
+                              : Image.asset(
+                                  'assets/images/campfinLogo.png',
+                                  fit: BoxFit.cover,
+                                ),
                         ),
                       ),
-                      // Add some spacing between the image and the text
                       const SizedBox(width: 20),
-                      // Add an expanded widget to take up the remaining horizontal space
-                      const Expanded(
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            SizedBox(height: 5),
+                            const SizedBox(height: 5),
                             Text(
-                              "อุทยานแห่งชาติเขาใหญ่",
-                              style: TextStyle(
+                              place['name'],
+                              style: const TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 8),
+                            const SizedBox(height: 8),
                             Row(
                               children: <Widget>[
-                                Icon(
+                                const Icon(
                                   Icons.location_on,
                                   color: Colors.black,
                                   size: 16,
                                 ),
                                 Text(
-                                  "นครราชสีมา",
-                                  style: TextStyle(
+                                  place['address'],
+                                  style: const TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,
                                   ),
                                 ),
                               ],
                             ),
-                            SizedBox(height: 8),
-                            Row(
+                            const SizedBox(height: 8),
+                            const Row(
                               children: <Widget>[
                                 Icon(
                                   Icons.star,
@@ -205,7 +225,7 @@ class PlaceCard extends StatelessWidget {
                                   size: 16,
                                 ),
                                 Text(
-                                  "4.5",
+                                  "4.5", // Here you can use the actual rating if available
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: Colors.black,

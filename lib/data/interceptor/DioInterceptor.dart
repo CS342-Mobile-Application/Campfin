@@ -1,9 +1,16 @@
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:mobile_campfin/controllers/auth_controller.dart';
 
 class DioInterceptor extends Interceptor {
   Dio dio = Dio();
+  final AuthController authController = Get.put(AuthController());
 
   var token = "token";
+
+  DioInterceptor() {
+    token = authController.getToken();
+  }
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {

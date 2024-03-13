@@ -1,6 +1,6 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_web_auth/flutter_web_auth.dart';
-import 'package:get/state_manager.dart';
+import 'package:get/get.dart';
 
 const String redirectUrl = "com.campfin.app";
 
@@ -8,10 +8,15 @@ class AuthController extends GetxController {
   var token = ''.obs;
   final FlutterSecureStorage _storage =const FlutterSecureStorage();
 
+
   @override
   void onInit() {
     super.onInit();
     loadTokenFromStorage();
+  }
+
+  String getToken (){
+    return token.value;
   }
 
   void loadTokenFromStorage() async {
@@ -30,6 +35,12 @@ class AuthController extends GetxController {
     await _storage.write(key: 'token', value: value);
   }
 
+  void removeToken() async {
+    token.value = '';
+    await _storage.delete(key: 'token');
+    Get.rootDelegate.offNamed('/login');
+  }
+
   Future<void> loginWithGoogle() async {
     const authUrl = "https://asus.kittikun.me/auth/google";
 
@@ -41,8 +52,8 @@ class AuthController extends GetxController {
       final tokenValue = Uri.parse(result).queryParameters['token'];
       if (tokenValue != null) {
         setToken(tokenValue);
+        Get.rootDelegate.offNamed('/home');
       }
-      print("Authentication Result: $tokenValue");
     } catch (e) {
       print("Error during authentication: $e");
     }
