@@ -1,13 +1,11 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_web_auth/flutter_web_auth.dart';
+
 import 'package:get/get.dart';
+import 'package:mobile_campfin/services/SecureStorageService.dart';
 
-const String redirectUrl = "com.campfin.app";
-
-class AuthController extends GetxController {
+class AuthController extends GetxController{
   var token = ''.obs;
-  final FlutterSecureStorage _storage =const FlutterSecureStorage();
 
+  final SecureStorageService _storage = SecureStorageService();
 
   @override
   void onInit() {
@@ -15,17 +13,17 @@ class AuthController extends GetxController {
     loadTokenFromStorage();
   }
 
-  String getToken (){
+  String getToken() {
     return token.value;
   }
 
   void loadTokenFromStorage() async {
     try {
       String? storedToken = await _storage.read(key: 'token');
-      if (storedToken != null){
-      setToken(storedToken);
+      if (storedToken != null) {
+        setToken(storedToken);
       }
-        } catch (e) {
+    } catch (e) {
       print("Error loading token from storage: $e");
     }
   }
@@ -41,21 +39,4 @@ class AuthController extends GetxController {
     Get.rootDelegate.offNamed('/login');
   }
 
-  Future<void> loginWithGoogle() async {
-    const authUrl = "https://asus.kittikun.me/auth/google";
-
-    try {
-      final result = await FlutterWebAuth.authenticate(
-        url: authUrl,
-        callbackUrlScheme: redirectUrl,
-      );
-      final tokenValue = Uri.parse(result).queryParameters['token'];
-      if (tokenValue != null) {
-        setToken(tokenValue);
-        Get.rootDelegate.offNamed('/home');
-      }
-    } catch (e) {
-      print("Error during authentication: $e");
-    }
-  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide NavigationBar;
 import 'package:get/get.dart';
 import 'package:mobile_campfin/controllers/auth_controller.dart';
+import 'package:mobile_campfin/controllers/google_controller.dart';
 import 'package:mobile_campfin/view/profile.dart';
 
 

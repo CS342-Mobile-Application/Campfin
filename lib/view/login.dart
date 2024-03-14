@@ -1,7 +1,8 @@
 // import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:mobile_campfin/controllers/auth_controller.dart';
+import 'package:mobile_campfin/controllers/google_controller.dart';
+import 'package:mobile_campfin/controllers/login_controller.dart';
 import 'package:mobile_campfin/data/client/dio_client.dart';
 
 class Login extends StatefulWidget {
@@ -12,8 +13,8 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final authController = Get.put(AuthController());
-
+  final GoogleController googleController = Get.put(GoogleController());
+  final LoginController loginController = Get.put(LoginController());
 
   bool _isObscured = true;
   final _formKey = GlobalKey<FormState>();
@@ -21,7 +22,6 @@ class _LoginState extends State<Login> {
   final TextEditingController _passwordController = TextEditingController();
   final dio = DioClient();
   final String redirectUrl = "com.campfin.app";
-
 
   @override
   Widget build(BuildContext context) {
@@ -138,8 +138,9 @@ class _LoginState extends State<Login> {
                       ElevatedButton(
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            await _signInWithUsernameAndPassword();
-                            Get.rootDelegate.offNamed('/home');
+                            await loginController.loginWithUsernameAndPassword(
+                                _usernameController.text,
+                                _passwordController.text);
                           }
                         },
                         style: ElevatedButton.styleFrom(
@@ -186,8 +187,8 @@ class _LoginState extends State<Login> {
                       const SizedBox(height: 10),
                       ElevatedButton.icon(
                         onPressed: () async {
-                           await authController.loginWithGoogle();
-                        },  
+                          await googleController.loginWithGoogle();
+                        },
                         icon: Image.asset('assets/images/google-logo.png',
                             width: 24),
                         label: const Text('Continue with Google'),
@@ -230,21 +231,5 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-  }
-
-  Future<void> _signInWithUsernameAndPassword() async {
-    final username = _usernameController.text;
-    final password = _passwordController.text;
-
-    final data = {
-      "username": username,
-      "password": password,
-    };
-    await dio.login({
-      'username': _usernameController.text,
-      'password': _passwordController.text,
-    });
-    print("Login: $data");
-    return;
   }
 }
